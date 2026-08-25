@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Minimarket 24/7",
+    "slug": "minimarket24-7-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#f2eee3",
+    "splash": {
+      "backgroundColor": "#0b1f17"
+    },
+    "android": {
+      "package": "com.gelsyn.minimarket24",
+      "adaptiveIcon": {
+        "backgroundColor": "#0b1f17"
+      }
+    },
+    "extra": {
+      "apiUrl": "https://minimarket24-7-production.up.railway.app",
+      "eas": {
+        "projectId": "d182b4a1-68fa-40c0-b284-06bbd6edccc4"
+      }
+    },
+    "plugins": [
+      "expo-asset"
+    ],
+    "owner": "gelsyn"
+  }
+}
