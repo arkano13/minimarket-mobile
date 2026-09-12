@@ -48,10 +48,7 @@ export function ComprasScreen({ token }) {
   const [productResults, setProductResults] = useState([]);
   const [items, setItems] = useState([]);
 
-  const total = items.reduce(
-    (sum, item) => sum + Number(item.costo || 0) * Number(item.cantidad || 0),
-    0,
-  );
+  const total = items.reduce((sum, item) => sum + Number(item.costoTotal || 0), 0);
 
   async function loadPurchases() {
     setLoading(true);
@@ -151,7 +148,7 @@ export function ComprasScreen({ token }) {
         );
       }
 
-      return [...current, { ...product, cantidad: "1", costo: String(product.costo ?? "") }];
+      return [...current, { ...product, cantidad: "1", costoTotal: "" }];
     });
 
     setProductSearch("");
@@ -181,6 +178,16 @@ export function ComprasScreen({ token }) {
       return;
     }
 
+    if (items.some((item) => !item.cantidad || Number(item.cantidad) <= 0)) {
+      setError("Revisa la cantidad de cada producto.");
+      return;
+    }
+
+    if (items.some((item) => !item.costoTotal || Number(item.costoTotal) <= 0)) {
+      setError("Escribe el costo total de cada producto.");
+      return;
+    }
+
     setSaving(true);
     setError("");
 
@@ -190,7 +197,7 @@ export function ComprasScreen({ token }) {
         productos: items.map((item) => ({
           presentacionId: item.presentacionId,
           cantidad: Number(item.cantidad),
-          costo: Number(item.costo),
+          costoTotal: Number(item.costoTotal),
         })),
       });
 
@@ -324,16 +331,24 @@ export function ComprasScreen({ token }) {
                   </View>
 
                   <View style={shared.rowField}>
-                    <Text style={shared.label}>Costo unitario</Text>
+                    <Text style={shared.label}>Costo total</Text>
 
                     <TextInput
                       keyboardType="numeric"
-                      onChangeText={(value) => updateItem(item.presentacionId, "costo", value)}
+                      onChangeText={(value) =>
+                        updateItem(item.presentacionId, "costoTotal", value)
+                      }
                       style={shared.input}
-                      value={item.costo}
+                      value={item.costoTotal}
                     />
                   </View>
                 </View>
+
+                {item.costoTotal && Number(item.cantidad) > 0 ? (
+                  <Text style={shared.cardMeta}>
+                    L {formatMoney(Number(item.costoTotal) / Number(item.cantidad))} por unidad
+                  </Text>
+                ) : null}
               </View>
             ))}
 
